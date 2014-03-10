@@ -1,0 +1,17 @@
+task :default => [:test]
+
+file 'Percolation.class' => ['Percolation.java'] do
+  sh 'javac -cp .:../lib/algs4.jar Percolation.java'
+end
+
+file 'PercolationTest.class' => ['PercolationTest.java'] do
+  sh 'javac -cp .:../lib/junit-4.11.jar PercolationTest.java'
+end
+
+task :test => ['Percolation.class', 'PercolationTest.class'] do
+  sh 'java -cp .:../lib/junit-4.11.jar:../lib/hamcrest-core-1.3.jar org.junit.runner.JUnitCore PercolationTest'
+end
+
+task :compviz do
+  sh 'javac -cp .:../lib/stdlib.jar PercolationVisualizer.java'
+end
