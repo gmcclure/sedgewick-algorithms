@@ -14,24 +14,13 @@ public class Percolation {
 
         // initialize grid
         for (int i = 0; i < gridSize; i++) {
-            for (int j = 0; j < gridSize; j++) {
-                if (i == 0 || i == gridSize - 1) {
-                    grid[i][j] = 1;
-                } else {
-                    grid[i][j] = 0;
-                }
-            }
+            grid[0][i] = 1; grid[gridSize - 1][i] = 1;
         }
 
         // connect top row of grid via uf
         for (int i = 0; i < gridSize - 1; i++) {
             uf.union(rcToUFIdx(0, i), rcToUFIdx(0, i + 1));
         }
-
-        // connect bottom row of grid via uf
-        // for (int i = 0; i < gridSize - 1; i++) {
-        //     uf.union(rcToUFIdx(gridSize - 1, i), rcToUFIdx(gridSize - 1, i + 1));
-        // }
     }
 
     private void checkBounds(int i, int j) {
@@ -61,7 +50,6 @@ public class Percolation {
     }
 
     public boolean percolates() {
-        // return uf.connected( rcToUFIdx(0, 0), rcToUFIdx(gridSize - 1, gridSize - 1) );
         for (int i = 0; i < gridSize; i++) {
             if (uf.connected( rcToUFIdx(0, 0), rcToUFIdx(gridSize - 1, i) )) {
                 return true;
