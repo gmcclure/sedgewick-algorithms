@@ -1,0 +1,19 @@
+task :default => ['c:sap']
+
+file 'SAP.class' => ['SAP.java'] do
+  sh 'javac SAP.java'
+end
+
+namespace :c do
+  desc "Compile SAP.java"
+  task :sap => ['SAP.java'] do
+    sh 'javac SAP.java'
+  end
+end
+
+namespace :r do
+  desc "Run SAP's public main"
+  task :sap => ['SAP.class'] do
+    sh 'java SAP'
+  end
+end

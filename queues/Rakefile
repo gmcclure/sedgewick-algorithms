@@ -1,0 +1,49 @@
+file 'Deque.class' => ['Deque.java'] do
+  sh 'javac Deque.java'
+end
+
+file 'DequeTest.class' => ['DequeTest.java'] do
+  sh 'javac DequeTest.java'
+end
+
+file 'RandomizedQueue.class' => ['RandomizedQueue.java'] do
+  sh 'javac RandomizedQueue.java'
+end
+
+file 'RandomizedQueueTest.class' => ['RandomizedQueueTest.java'] do
+  sh 'javac RandomizedQueueTest.java'
+end
+
+file 'Subset.class' => ['Subset.java'] do
+  sh 'javac Subset.java'
+end
+
+namespace :t do
+  task :dq => ['Deque.class', 'DequeTest.class'] do
+    sh 'java -cp .:../lib/junit-4.11.jar:../lib/hamcrest-core-1.3.jar org.junit.runner.JUnitCore DequeTest'
+  end
+
+  task :rq => ['RandomizedQueue.class', 'RandomizedQueueTest.class'] do
+    sh 'java -cp .:../lib/junit-4.11.jar:../lib/hamcrest-core-1.3.jar org.junit.runner.JUnitCore RandomizedQueueTest'
+  end
+
+  task :sub => ['Subset.class', 'RandomizedQueue.class'] do
+    sh 'echo A B C D E F G H I J K L N O P Q | java Subset 5'
+  end
+end
+
+namespace :c do
+  task :sub => ['Subset.java', 'RandomizedQueue.class'] do
+    sh 'javac Subset.java'
+  end
+end
+
+namespace :r do
+  task :rq => ['RandomizedQueue.class'] do
+    sh 'java RandomizedQueue'
+  end
+end
+
+task :prep do
+  sh 'zip queues.zip Deque.java RandomizedQueue.java Subset.java'
+end
