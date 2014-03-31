@@ -40,6 +40,16 @@ public class SAP {
         return shortest.ancestor;
     }
 
+    public int length(Iterable<Integer> v, Iterable<Integer> w) {
+        int nV = v.next(), nW = w.next();
+        return length(nV, nW);
+    }
+
+    public int ancestor(Iterable<Integer> v, Iterable<Integer> w) {
+        int nV = v.next(), nW = w.next();
+        return ancestor(nV, nW);
+    }
+
     private static class Path {
         public int V, W;
         public int length;
