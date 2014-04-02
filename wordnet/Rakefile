@@ -1,7 +1,15 @@
-task :default => ['c:sap']
+task :default => ['c:wn']
 
 file 'SAP.class' => ['SAP.java'] do
   sh 'javac SAP.java'
+end
+
+file 'WordNet.class' => ['WordNet.java'] do
+  sh 'javac WordNet.java'
+end
+
+file 'WordNetTest.class' => ['WordNetTest.java'] do
+  sh 'javac WordNetTest.java'
 end
 
 namespace :c do
@@ -9,11 +17,23 @@ namespace :c do
   task :sap => ['SAP.java'] do
     sh 'javac SAP.java'
   end
+
+  desc "Compile WordNet.java"
+  task :wn => ['WordNet.java'] do
+    sh 'javac WordNet.java'
+  end
 end
 
 namespace :r do
   desc "Run SAP's public main"
   task :sap => ['SAP.class'] do
     sh 'java SAP'
+  end
+end
+
+namespace :t do
+  desc "Test WordNet class"
+  task :wn => ['WordNet.class', 'WordNetTest.class'] do
+    sh 'java -cp .:../lib/junit-4.11.jar:../lib/hamcrest-core-1.3.jar org.junit.runner.JUnitCore WordNetTest'
   end
 end

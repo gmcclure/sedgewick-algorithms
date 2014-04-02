@@ -27,27 +27,29 @@ public class SAP {
     }
 
     public int length(int v, int w) {
-        if (shortest != null && shortest.V == v && shortest.W == w) 
+        if (v < 0 || w < 0 || v > G.V() - 1 || w > G.V() - 1)
+            throw new IndexOutOfBoundsException();
+        if (shortest != null && shortest.V == v && shortest.W == w)
             return shortest.length;
         bfs(v, w);
         return shortest.length;
     }
 
     public int ancestor(int v, int w) {
-        if (shortest != null && shortest.V == v && shortest.W == w) 
+        if (v < 0 || w < 0 || v > G.V() - 1 || w > G.V() - 1)
+            throw new IndexOutOfBoundsException();
+        if (shortest != null && shortest.V == v && shortest.W == w)
             return shortest.ancestor;
         bfs(v, w);
         return shortest.ancestor;
     }
 
     public int length(Iterable<Integer> v, Iterable<Integer> w) {
-        int nV = v.next(), nW = w.next();
-        return length(nV, nW);
+        return length(v.iterator().next(), w.iterator().next());
     }
 
     public int ancestor(Iterable<Integer> v, Iterable<Integer> w) {
-        int nV = v.next(), nW = w.next();
-        return ancestor(nV, nW);
+        return ancestor(v.iterator().next(), w.iterator().next());
     }
 
     private static class Path {
