@@ -5,17 +5,22 @@ import java.util.LinkedList;
 
 public class WordNet {
     public /* private */ Digraph dg;
-    public /* private */ HashMap<String, LinkedList<Integer> > nouns;
+    public /* private */ HashMap<String, LinkedList<Integer>> nouns;
+    public /* private */ HashMap<Integer, String> syns;
 
     public WordNet(String synsets, String hypernyms) {
         In sin = new In(synsets);
-        nouns = new HashMap<String, LinkedList<Integer> >();
+        nouns = new HashMap<String, LinkedList<Integer>>();
+        syns = new HashMap<Integer, String>();
         int sz = 0;
 
         while (sin.hasNextLine()) {
             String line = sin.readLine();
             String[] vals = line.split(",");
             String[] words = vals[1].split(" ");
+            
+            syns.put(Integer.parseInt(vals[0]), vals[1]);
+
             for (String w : words) {
                 if (nouns.containsKey(w)) {
                     nouns.get(w).add(Integer.parseInt(vals[0]));
@@ -46,7 +51,7 @@ public class WordNet {
         hin.close();
     }
 
-    public Iterable<string> nouns() {
+    public Iterable<String> nouns() {
         return nouns.keySet();
     }
 
@@ -55,8 +60,26 @@ public class WordNet {
     }
 
     public int distance(String nounA, String nounB) {
+        LinkedList<Integer> aSyns = nouns.get(nounA);
+        LinkedList<Integer> bSyns = nouns.get(nounB);
+        SAP s = new SAP(dg);
+        return s.length(aSyns, bSyns);
     }
 
     public String sap(String nounA, String nounB) {
+        LinkedList<Integer> aSyns = nouns.get(nounA);
+        LinkedList<Integer> bSyns = nouns.get(nounB);
+        SAP s = new SAP(dg);
+        return syns.get(s.ancestor(aSyns, bSyns));
+    }
+
+    public static void main(String args[]) {
+        WordNet wn = new WordNet(args[0], args[1]);
+        while (!StdIn.isEmpty()) {
+            String u = StdIn.readString();
+            String v = StdIn.readString();
+            StdOut.println("distance = " + wn.distance(u, v));
+            StdOut.println("sap = " + wn.sap(u, v));
+        }
     }
 }

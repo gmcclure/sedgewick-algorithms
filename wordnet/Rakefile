@@ -29,6 +29,11 @@ namespace :r do
   task :sap => ['SAP.class'] do
     sh 'java SAP'
   end
+
+  desc "Run WordNet's public main"
+  task :wn => ['WordNet.class'] do
+    sh 'java WordNet'
+  end
 end
 
 namespace :t do
