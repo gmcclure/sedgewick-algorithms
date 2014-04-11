@@ -19,8 +19,13 @@ namespace :c do
   end
 
   desc "Compile WordNet.java"
-  task :wn => ['WordNet.java'] do
+  task :wn => ['WordNet.java', 'SAP.class'] do
     sh 'javac WordNet.java'
+  end
+
+  desc "Compile Outcast.java"
+  task :out => ['Outcast.java', 'WordNet.class', 'SAP.class'] do
+    sh 'javac Outcast.java'
   end
 end
 
@@ -31,8 +36,13 @@ namespace :r do
   end
 
   desc "Run WordNet's public main"
-  task :wn => ['WordNet.class'] do
+  task :wn => ['WordNet.class, SAP.class'] do
     sh 'java WordNet'
+  end
+
+  desc "Run Outcast test"
+  task :out => ['Outcast.class', 'WordNet.class', 'SAP.class'] do
+    sh 'java Outcast data/synsets.txt data/hypernyms.txt data/outcast5.txt data/outcast8.txt data/outcast11.txt'
   end
 end
 
@@ -41,4 +51,8 @@ namespace :t do
   task :wn => ['WordNet.class', 'WordNetTest.class'] do
     sh 'java -cp .:../lib/junit-4.11.jar:../lib/hamcrest-core-1.3.jar org.junit.runner.JUnitCore WordNetTest'
   end
+end
+
+task :prep do
+  sh 'zip wordnet.zip SAP.java WordNet.java Outcast.java'
 end

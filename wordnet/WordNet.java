@@ -1,12 +1,11 @@
-import java.util.Iterator;
 import java.util.HashMap;
 import java.util.LinkedList;
 
 
 public class WordNet {
-    public /* private */ Digraph dg;
-    public /* private */ HashMap<String, LinkedList<Integer>> nouns;
-    public /* private */ HashMap<Integer, String> syns;
+    private Digraph dg;
+    private HashMap<String, LinkedList<Integer>> nouns;
+    private HashMap<Integer, String> syns;
 
     public WordNet(String synsets, String hypernyms) {
         In sin = new In(synsets);
@@ -73,7 +72,7 @@ public class WordNet {
         return syns.get(s.ancestor(aSyns, bSyns));
     }
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         WordNet wn = new WordNet(args[0], args[1]);
         while (!StdIn.isEmpty()) {
             String u = StdIn.readString();
