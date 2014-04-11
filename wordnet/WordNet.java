@@ -6,6 +6,7 @@ public class WordNet {
     private Digraph dg;
     private HashMap<String, LinkedList<Integer>> nouns;
     private HashMap<Integer, String> syns;
+    private boolean[] ancestors;
 
     public WordNet(String synsets, String hypernyms) {
         In sin = new In(synsets);
@@ -35,6 +36,7 @@ public class WordNet {
 
         sin.close();
 
+        ancestors = new boolean[sz];
         dg = new Digraph(sz);
         In hin = new In(hypernyms);
 
@@ -44,10 +46,24 @@ public class WordNet {
             int v = Integer.parseInt(vals[0]);
             for (int i = 1; i < vals.length; i++) {
                 dg.addEdge(v, Integer.parseInt(vals[i]));
+                ancestors[v] = true;
             }
         }
 
         hin.close();
+
+        if (notRootedDAG(dg)) {
+            throw new IllegalArgumentException("not a rooted DAG");
+        }
+    }
+
+    private boolean notRootedDAG(Digraph d) {
+        int c = 0;
+        for (boolean e : ancestors) { if (!e) c++; }
+        if (c > 1) return true;
+
+        Topological dc = new Topological(d);
+        return !dc.hasOrder();
     }
 
     public Iterable<String> nouns() {
@@ -59,6 +75,8 @@ public class WordNet {
     }
 
     public int distance(String nounA, String nounB) {
+        if (!isNoun(nounA) || !isNoun(nounB))
+            throw new IllegalArgumentException("not a WordNet noun");
         LinkedList<Integer> aSyns = nouns.get(nounA);
         LinkedList<Integer> bSyns = nouns.get(nounB);
         SAP s = new SAP(dg);
@@ -66,6 +84,8 @@ public class WordNet {
     }
 
     public String sap(String nounA, String nounB) {
+        if (!isNoun(nounA) || !isNoun(nounB))
+            throw new IllegalArgumentException("not a WordNet noun");
         LinkedList<Integer> aSyns = nouns.get(nounA);
         LinkedList<Integer> bSyns = nouns.get(nounB);
         SAP s = new SAP(dg);
