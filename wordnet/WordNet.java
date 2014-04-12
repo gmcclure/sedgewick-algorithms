@@ -7,6 +7,7 @@ public class WordNet {
     private HashMap<String, LinkedList<Integer>> nouns;
     private HashMap<Integer, String> syns;
     private boolean[] ancestors;
+    private SAP s;
 
     public WordNet(String synsets, String hypernyms) {
         In sin = new In(synsets);
@@ -55,6 +56,8 @@ public class WordNet {
         if (notRootedDAG(dg)) {
             throw new IllegalArgumentException("not a rooted DAG");
         }
+
+        s = new SAP(dg);
     }
 
     private boolean notRootedDAG(Digraph d) {
@@ -79,7 +82,6 @@ public class WordNet {
             throw new IllegalArgumentException("not a WordNet noun");
         LinkedList<Integer> aSyns = nouns.get(nounA);
         LinkedList<Integer> bSyns = nouns.get(nounB);
-        SAP s = new SAP(dg);
         return s.length(aSyns, bSyns);
     }
 
@@ -88,7 +90,6 @@ public class WordNet {
             throw new IllegalArgumentException("not a WordNet noun");
         LinkedList<Integer> aSyns = nouns.get(nounA);
         LinkedList<Integer> bSyns = nouns.get(nounB);
-        SAP s = new SAP(dg);
         return syns.get(s.ancestor(aSyns, bSyns));
     }
 
